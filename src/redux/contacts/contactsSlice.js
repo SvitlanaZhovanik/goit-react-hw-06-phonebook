@@ -18,3 +18,4 @@ export const contactsSlice = createSlice({
   },
 });
 export const { addItem, deleteItem, filterContact } = contactsSlice.actions;
+export default contactsSlice.reducer;

@@ -1,14 +1,37 @@
 import { useState } from 'react';
 import { FcBusinessContact, FcCallback } from 'react-icons/fc';
 import { WrapperForm, Label, Input, ButtonForm } from './Form.styled';
+import { useDispatch, useSelector } from 'react-redux';
+import { nanoid } from 'nanoid';
+import { toast } from 'react-toastify';
+import { FcDataRecovery } from 'react-icons/fc';
+import { addItem } from '../../redux/contacts/contactsSlice';
+import { getContacts } from '../../redux/contacts/selectors';
 
-export default function Form({ onChange }) {
+export default function Form() {
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
+  const addContact = (name, number) => {
+    const contact = {
+      id: nanoid(),
+      name: name,
+      number: number,
+    };
+    const normalizeName = contact.name.toLowerCase();
+    if (contacts.some(item => item.name.toLowerCase() === normalizeName)) {
+      return toast.info(`${contact.name} is already in your contacts`, {
+        icon: <FcDataRecovery size="30px" />,
+      });
+    }
+    dispatch(addItem(contact));
+  };
+
   const handleSubmit = e => {
     e.preventDefault();
-    onChange(name, number);
+    addContact(name, number);
     setName('');
     setNumber('');
   };

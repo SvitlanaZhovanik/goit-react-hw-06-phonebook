@@ -1,20 +1,23 @@
 import { Label, Input } from '../Form/Form.styled';
-import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
+import { getFilter } from '../../redux/contacts/selectors';
+import { filterContact } from '../../redux/contacts/contactsSlice';
 
-const Filter = ({ value, onChange }) => {
+const Filter = () => {
+  const dispatch = useDispatch();
+  const filter = useSelector(getFilter);
+
+  const handleFilter = e => dispatch(filterContact(e.currentTarget.value));
   return (
     <Label>
       Find contacts by name:
       <Input
         type="text"
         placeholder="Please enter the required name"
-        value={value}
-        onChange={onChange}
+        value={filter}
+        onChange={handleFilter}
       />
     </Label>
   );
-};
-Filter.propTypes = {
-  value: PropTypes.string,
 };
 export default Filter;
